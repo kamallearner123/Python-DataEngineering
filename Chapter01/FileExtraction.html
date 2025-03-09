@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Handling in Python</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1, h2, h3 { color: #003366; }
+        pre { background-color: #f4f4f4; padding: 10px; border-left: 4px solid #003366; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #003366; color: white; }
+    </style>
+</head>
+<body>
+    <h1>📌 Considerations When Reading and Loading Files in Python</h1>
+    
+    <h2>1️⃣ File Handling Considerations</h2>
+    
+    <h3>✅ File Existence</h3>
+    <p>Before reading a file, check if it exists to prevent errors.</p>
+    <pre>
+import os
+
+file_path = "data.csv"
+if os.path.exists(file_path):
+    print("File found, proceeding with reading...")
+else:
+    print("File not found!")
+    </pre>
+    
+    <h3>✅ File Path Handling</h3>
+    <pre>
+import os
+folder = "data_folder"
+filename = "data.csv"
+file_path = os.path.join(folder, filename)
+print(f"File path: {file_path}")
+    </pre>
+    
+    <h3>✅ File Permissions</h3>
+    <pre>
+file_path = "protected_file.txt"
+try:
+    with open(file_path, "r") as file:
+        content = file.read()
+except PermissionError:
+    print("Permission denied! Check file access rights.")
+    </pre>
+    
+    <h3>✅ Reading Large Files</h3>
+    <pre>
+file_path = "large_file.txt"
+with open(file_path, "r") as file:
+    for line in file:
+        print(line.strip())
+    </pre>
+    
+    <h2>2️⃣ Data Handling Considerations</h2>
+    
+    <h3>✅ Handling Missing Data</h3>
+    <pre>
+import pandas as pd
+df = pd.read_csv("data_with_missing_values.csv")
+df.fillna(0, inplace=True)
+print(df.head())
+    </pre>
+    
+    <h3>✅ Data Type Conversion</h3>
+    <pre>
+df["Age"] = df["Age"].astype(int)
+print(df.dtypes)
+    </pre>
+    
+    <h2>3️⃣ Performance & Efficiency</h2>
+    
+    <h3>✅ Reading Large CSV Files</h3>
+    <pre>
+chunk_size = 1000
+for chunk in pd.read_csv("large_data.csv", chunksize=chunk_size):
+    print(chunk.head())
+    </pre>
+    
+    <h3>✅ Handling Compressed Files</h3>
+    <pre>
+df = pd.read_csv("compressed_data.csv.gz", compression="gzip")
+print(df.head())
+    </pre>
+    
+    <h2>4️⃣ Error Handling & Logging</h2>
+    
+    <h3>✅ Using Logging</h3>
+    <pre>
+import logging
+logging.basicConfig(filename="app.log", level=logging.ERROR)
+try:
+    with open("file.txt", "r") as file:
+        content = file.read()
+except Exception as e:
+    logging.error(f"Error reading file: {e}")
+    </pre>
+    
+    <h2>✅ Final Example: Safe File Reading</h2>
+    <pre>
+import os
+import pandas as pd
+file_path = "data.csv"
+if os.path.exists(file_path):
+    try:
+        df = pd.read_csv(file_path, encoding="utf-8", sep=",", dtype={"ID": int})
+        print(df.head())
+    except Exception as e:
+        print(f"Error reading file: {e}")
+else:
+    print("File not found!")
+    </pre>
+    
+    <h2>🎯 Summary</h2>
+    <table>
+        <tr>
+            <th>Concept</th>
+            <th>Key Takeaways</th>
+        </tr>
+        <tr>
+            <td>File Existence</td>
+            <td>Check if file exists before reading.</td>
+        </tr>
+        <tr>
+            <td>File Path Handling</td>
+            <td>Use os.path.join() for cross-platform compatibility.</td>
+        </tr>
+        <tr>
+            <td>Encoding Issues</td>
+            <td>Use encoding="utf-8" to avoid errors.</td>
+        </tr>
+        <tr>
+            <td>Large File Handling</td>
+            <td>Read in chunks using chunksize.</td>
+        </tr>
+        <tr>
+            <td>Data Validation</td>
+            <td>Ensure data format is correct before processing.</td>
+        </tr>
+        <tr>
+            <td>Exception Handling</td>
+            <td>Use try-except blocks to catch errors.</td>
+        </tr>
+        <tr>
+            <td>Logging</td>
+            <td>Use logging for debugging instead of print().</td>
+        </tr>
+    </table>
+</body>
+</html>
